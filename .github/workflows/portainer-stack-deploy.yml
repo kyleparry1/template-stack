@@ -1,0 +1,26 @@
+name: "Portainer Stack Deploy"
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    name: "Deploy"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v5
+      - name: "Portainer Deploy"
+        uses: cssnr/portainer-stack-deploy-action@v1
+        with:
+          name: "template"
+          file: "docker-compose.yml"
+          url: ${{ secrets.PORTAINER_URL }}
+          token: ${{ secrets.PORTAINER_TOKEN }}
+          standalone: true
+          username: ${{ secrets.GH_USERNAME }}
+          password: ${{ secrets.GH_PASSWORD }}
+          headers: |
+            {
+              "CF-Access-Client-Id": "${{ secrets.CF_CLIENT_ID }}",
+              "CF-Access-Client-Secret": "${{ secrets.CF_CLIENT_SECRET }}"
+            }
